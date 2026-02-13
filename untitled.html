@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine Invite 💘</title>
+  <style>
+    :root{
+      --bg1:#fff0f6;
+      --bg2:#ffe8f0;
+      --card:#ffffffcc;
+      --text:#2b2b2b;
+      --muted:#6b6b6b;
+      --accent:#ff3d7f;
+      --accent2:#ff7aa8;
+      --shadow: 0 20px 60px rgba(0,0,0,.12);
+      --radius: 24px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(1200px 700px at 15% 10%, #ffffff 0%, transparent 55%),
+        radial-gradient(900px 600px at 85% 15%, #ffffff 0%, transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+      overflow-y: auto;
+    }
+    .floaty{
+      position:absolute; inset:-20%;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,61,127,.15) 0 12%, transparent 13%),
+        radial-gradient(circle at 60% 20%, rgba(255,122,168,.13) 0 10%, transparent 11%),
+        radial-gradient(circle at 75% 60%, rgba(255,61,127,.12) 0 11%, transparent 12%),
+        radial-gradient(circle at 35% 70%, rgba(255,122,168,.12) 0 9%, transparent 10%);
+      filter: blur(1px);
+      animation: drift 14s ease-in-out infinite alternate;
+      pointer-events:none;
+    }
+    @keyframes drift{
+      from{ transform: translate(-2%, -1%) rotate(-1deg) }
+      to  { transform: translate(2%, 1%) rotate(1deg) }
+    }
+
+    .card{
+      width:min(720px, 92vw);
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,.8);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 24px;
+      position:relative;
+    }
+    .top{
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(255,61,127,.16), rgba(255,122,168,.16));
+      border:1px solid rgba(255,61,127,.15);
+      font-weight:700;
+    }
+    .badge span{ font-size:18px; }
+    h1{
+      margin:14px 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height:1.08;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size: clamp(14px, 1.8vw, 16px);
+      line-height:1.5;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+    }
+    @media (max-width: 720px){
+      .grid{grid-template-columns:1fr}
+    }
+    .panel{
+      background:#fff;
+      border-radius: 18px;
+      border:1px solid rgba(0,0,0,.06);
+      padding:16px;
+    }
+    .prompt{
+      font-weight:800;
+      font-size:18px;
+      margin:0 0 10px;
+    }
+
+    /* quiz */
+    .quiz{ display:grid; gap:12px; }
+    .stepper{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px;
+      border-radius:16px;
+      border:1px dashed rgba(255,61,127,.35);
+      background: rgba(255,61,127,.05);
+    }
+    .score{ font-weight:900; white-space:nowrap; }
+    .meter{
+      flex:1;
+      height:10px;
+      border-radius:999px;
+      background: rgba(0,0,0,.06);
+      overflow:hidden;
+      min-width:120px;
+    }
+    .fill{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius:999px;
+      transition: width .3s ease;
+    }
+    .reaction{
+      margin-top:8px;
+      font-size:13px;
+      color:var(--muted);
+      min-height:18px;
+    }
+
+    .qbox{
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:16px;
+      padding:12px;
+      background: linear-gradient(180deg, #fff, rgba(255,61,127,.03));
+    }
+    .qbox h3{
+      margin:0 0 10px;
+      font-size:15px;
+      letter-spacing:-.01em;
+    }
+    .opts{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .opt{
+      border:1px solid rgba(0,0,0,.12);
+      background:#fff;
+      border-radius:999px;
+      padding:10px 12px;
+      font-weight:800;
+      font-size:13px;
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .opt:hover{ box-shadow: 0 10px 18px rgba(0,0,0,.08); }
+    .opt:active{ transform: scale(.98) }
+
+    .continue{
+      background:#111;
+      color:#fff;
+      padding:10px 14px;
+      border-radius:999px;
+      border:0;
+      cursor:pointer;
+      font-weight:900;
+      opacity:.55;
+      pointer-events:none;
+      white-space:nowrap;
+    }
+    .continue.ready{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    /* photo */
+    .photoWrap{
+      display:none;
+      margin:10px 0 12px;
+      border-radius:16px;
+      border:1px solid rgba(0,0,0,.08);
+      overflow:hidden;
+      background:#fff;
+    }
+    .photoWrap.show{ display:block; }
+    .photo{
+      display:block;
+      width:100%;
+      height:auto;
+      max-height:240px;
+      object-fit:cover;
+    }
+    .photoHint{
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+      display:none;
+    }
+    .photoHint code{
+      background: rgba(0,0,0,.06);
+      padding:2px 6px;
+      border-radius:8px;
+      font-weight:700;
+    }
+
+    /* Destiny buttons (same look as before) */
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+      position:relative;
+      min-height:52px;
+      align-items:center;
+    }
+    button{
+      border:0;
+      cursor:pointer;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-weight:800;
+      font-size:15px;
+      transition: transform .08s ease, box-shadow .2s ease;
+      user-select:none;
+    }
+    button:active{ transform: scale(.98) }
+    .yes{
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color:white;
+      box-shadow: 0 12px 24px rgba(255,61,127,.25);
+    }
+    .yes:hover{ box-shadow: 0 16px 28px rgba(255,61,127,.30) }
+    .maybe{
+      background:#fff;
+      color:#333;
+      border:1px solid rgba(0,0,0,.12);
+    }
+    .tiny{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:8px;
+    }
+
+    .details{ display:grid; gap:10px; }
+    .row{
+      display:flex; gap:10px; align-items:center;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px dashed rgba(255,61,127,.35);
+      background: rgba(255,61,127,.05);
+      font-size:14px;
+    }
+    .row b{min-width:72px}
+    .pill{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(0,0,0,.06);
+      font-weight:700;
+    }
+
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      place-items:center;
+      background: rgba(0,0,0,.35);
+      padding:18px;
+    }
+    .modal.open{ display:grid; }
+    .sheet{
+      width:min(560px, 92vw);
+      background:#fff;
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding:18px;
+      border:1px solid rgba(0,0,0,.06);
+    }
+    .sheet h2{ margin:4px 0 8px; font-size:22px; }
+    .sheet p{ margin:0 0 14px; color:var(--muted); line-height:1.55; }
+    .sheet .btns{ display:flex; gap:10px; flex-wrap:wrap; }
+    .close{ background:#111; color:#fff; padding:10px 14px; }
+    .copy{ background:#fff; border:1px solid rgba(0,0,0,.12); }
+
+    .toast{
+      position:fixed;
+      bottom:18px; left:50%;
+      transform:translateX(-50%);
+      background:#111;
+      color:#fff;
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:700;
+      display:none;
+      box-shadow: 0 10px 30px rgba(0,0,0,.22);
+    }
+    .toast.show{ display:block; }
+
+    .heart{
+      position:absolute;
+      right:18px; top:18px;
+      font-size:20px;
+      opacity:.85;
+      animation: pop 1.8s ease-in-out infinite;
+    }
+    @keyframes pop{
+      0%,100%{ transform: translateY(0) }
+      50%{ transform: translateY(-4px) }
+    }
+  </style>
+</head>
+<body>
+  <div class="floaty" aria-hidden="true"></div>
+
+  <main class="card" role="main">
+    <div class="heart" aria-hidden="true">💘</div>
+
+    <div class="top">
+      <div>
+        <div class="badge"><span>💌</span> Valentine’s Invite</div>
+        <h1>Hey <span id="theirName">Cutie</span>…<br/>wanna be my Valentine? 😏</h1>
+        <p class="sub">
+          This invitation is 100% organic, gluten-free, and scientifically proven to cause
+          <b>smiles</b>. Side effects may include butterflies and sudden urge to hold hands.
+        </p>
+      </div>
+
+      <div class="panel" style="max-width:260px">
+        <p class="prompt">The Deal 🍓</p>
+        <ul style="margin:0; padding-left:18px; color:#4b4b4b; line-height:1.6; font-size:15px;">
+          <li>One (1) adorable date</li>
+          <li>Zero (0) awkward vibes</li>
+          <li>Unlimited (∞) laughs</li>
+        </ul>
+        <div class="tiny">*Terms subject to cute-ness approval.</div>
+      </div>
+    </div>
+
+    <section class="grid" aria-label="Invite content">
+      <div class="panel">
+        <p class="prompt">Tiny compatibility check (one question at a time) 🧪</p>
+
+        <div class="quiz" id="quiz">
+          <div class="stepper">
+            <div class="score">Q <span id="qNum">1</span>/5 • Score: <span id="scoreNum">0</span>/12</div>
+            <div class="meter" aria-hidden="true"><div class="fill" id="fill"></div></div>
+            <button class="continue" id="continueBtn">Continue ➜</button>
+          </div>
+
+          <div class="photoWrap" id="photoWrap">
+            <img id="photo" class="photo" alt="Our photo" />
+          </div>
+
+          <div class="qbox" id="qbox">
+            <h3 id="qTitle">1) Pick the vibe:</h3>
+            <div class="opts" id="opts"></div>
+
+            <!-- Destiny area (hidden until last question) -->
+            <div id="destinyWrap" style="display:none;">
+              <div class="actions">
+                <button class="yes" id="yesBtn">Yes 😍</button>
+                <button class="maybe" id="shyBtn">I’m shy 🙈</button>
+                <button class="maybe" id="noBtn" title="nice try">No 😅</button>
+              </div>
+              <div class="tiny">
+                Tip: If you press “No”, the button may experience a sudden personality change.
+              </div>
+            </div>
+
+            <div class="reaction" id="reaction">Pick an option to continue 😏</div>
+            <div class="photoHint" id="photoHint">
+              Photo not loading? Put <code>ourphoto.HEIC</code> in the same folder as this HTML file.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel details">
+        <div class="row"><b>📅 When</b> <span class="pill" id="whenTxt">Feb 14</span></div>
+        <div class="row"><b>📍 Where</b> <span class="pill" id="whereTxt">Your pick (I’ll behave)</span></div>
+        <div class="row"><b>🍽️ Plan</b> <span class="pill" id="planTxt">Food + walk + vibes</span></div>
+        <div class="row"><b>👗 Dress</b> <span class="pill" id="dressTxt">Cute (as always)</span></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="sheet">
+      <h2 id="modalTitle">It’s a date! 🎉</h2>
+      <p id="modalBody">
+        I’ll bring the charm. You bring your smile.
+        Send me a “YES 💘” and I’ll lock the plan in.
+      </p>
+      <div class="btns">
+        <button class="close" id="closeBtn">Close</button>
+        <button class="copy" id="copyBtn">Copy details</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied ✨</div>
+
+  <script>
+    // Quick customization: ?name=...&when=...&where=...&plan=...&dress=...
+    const params = new URLSearchParams(location.search);
+    const set = (id, val) => { if(val) document.getElementById(id).textContent = val; };
+    set("theirName", params.get("name"));
+    set("whenTxt",  params.get("when"));
+    set("whereTxt", params.get("where"));
+    set("planTxt",  params.get("plan"));
+    set("dressTxt", params.get("dress"));
+
+    const modal = document.getElementById("modal");
+    const toast = document.getElementById("toast");
+    const openModal = (title, body) => {
+      document.getElementById("modalTitle").textContent = title;
+      document.getElementById("modalBody").textContent = body;
+      modal.classList.add("open");
+    };
+    const closeModal = () => modal.classList.remove("open");
+
+    // Photo
+    const PHOTO_SRC = "ourphoto.HEIC";
+    const photoWrap = document.getElementById("photoWrap");
+    const photo = document.getElementById("photo");
+    const photoHint = document.getElementById("photoHint");
+    let photoReady = false;
+    let photoAttempted = false;
+
+    const tryLoadPhoto = () => {
+  if (photoAttempted) return;
+  photoAttempted = true;
+
+  photo.src = PHOTO_SRC;
+
+  photo.onload = () => {
+    photoReady = true;
+    photoHint.style.display = "none";
+
+    // ✅ If we're currently on the photo question, activate it now
+    if (steps[idx].kind === "photo") {
+      opts.style.opacity = "1";
+      opts.style.pointerEvents = "auto";
+      lockContinue("Pick an option to continue 😏");
+    }
+  };
+
+  photo.onerror = () => {
+    photoReady = false;
+    photoHint.style.display = "block";
+
+    // ✅ If we're currently on the photo question, keep it locked
+    if (steps[idx].kind === "photo") {
+      opts.style.opacity = ".45";
+      opts.style.pointerEvents = "none";
+      lockContinue("Photo missing — add it to continue 📸");
+    }
+  };
+};
+
+    // Quiz data (last step is DESTINY)
+    const steps = [
+      {
+        kind: "normal",
+        title: "1) Pick the vibe:",
+        options: [
+          { label: "Cozy + cute 🧸", score: 3 },
+          { label: "Chaotic romantic 😈💘", score: 1 },
+          { label: "Chill + classy 🍷", score: 2 },
+        ],
+      },
+      {
+        kind: "normal",
+        title: "2) Ideal snack situation:",
+        options: [
+          { label: "Fries to share 🍟", score: 1 },
+          { label: "Dessert first 🍰", score: 2 },
+          { label: "Coffee & vibes ☕", score: 3 },
+        ],
+      },
+      {
+        kind: "photo",
+        title: "3) Be honest… is this your cutest photo? 📸",
+        options: [
+          { label: "YES. Frame it. 🖼️", score: 2 },
+          { label: "Cute… but I can click better 😌", score: 3 },
+          { label: "Delete it (respectfully) 😂", score: 1 },
+        ],
+      },
+      {
+        kind: "normal",
+        title: "4) Dream Valentine:",
+        options: [
+          { label: "Soft launch (low-key) 🌙", score: 2 },
+          { label: "Over the Top 🌇", score: 3 },
+          { label: "We’ll see where it goes 😌", score: 1 },
+        ],
+      },
+      {
+        kind: "destiny",
+        title: "5) Will you be my first and forever Valentine? (PS: Yeh bhi koi puchne ki baat hai?):",
+      }
+    ];
+
+    let idx = 0;
+    let score = 0;
+    const TOTAL = 12; // only first 4 questions score
+
+    const qNum = document.getElementById("qNum");
+    const scoreNum = document.getElementById("scoreNum");
+    const fill = document.getElementById("fill");
+    const qTitle = document.getElementById("qTitle");
+    const opts = document.getElementById("opts");
+    const reaction = document.getElementById("reaction");
+    const continueBtn = document.getElementById("continueBtn");
+    const destinyWrap = document.getElementById("destinyWrap");
+
+    let picked = false;
+
+    const setProgress = () => {
+      scoreNum.textContent = String(score);
+      fill.style.width = Math.round((score / TOTAL) * 100) + "%";
+    };
+    const lockContinue = (msg) => {
+      continueBtn.classList.remove("ready");
+      reaction.textContent = msg;
+    };
+    const unlockContinue = () => continueBtn.classList.add("ready");
+
+    const render = () => {
+      const step = steps[idx];
+      qNum.textContent = String(idx + 1);
+      qTitle.textContent = step.title;
+
+      picked = false;
+      continueBtn.classList.remove("ready");
+      continueBtn.textContent = (step.kind === "destiny") ? "Finish ✅" : "Continue ➜";
+      continueBtn.style.opacity = "";
+      continueBtn.style.pointerEvents = "";
+
+      // reset areas
+      opts.innerHTML = "";
+      destinyWrap.style.display = "none";
+
+      // photo
+      if (step.kind === "photo") {
+        photoWrap.classList.add("show");
+        tryLoadPhoto();
+
+        if (!photoReady) {
+          opts.style.opacity = ".45";
+          opts.style.pointerEvents = "none";
+          lockContinue("Photo missing — add it to continue 📸");
+        } else {
+          opts.style.opacity = "1";
+          opts.style.pointerEvents = "auto";
+          lockContinue("Pick an option to continue 😏");
+        }
+      } else {
+        photoWrap.classList.remove("show");
+        photoHint.style.display = "none";
+        opts.style.opacity = "1";
+        opts.style.pointerEvents = "auto";
+      }
+
+      // destiny step
+      if (step.kind === "destiny") {
+        // Hide options, show destiny buttons
+        opts.innerHTML = "";
+        destinyWrap.style.display = "block";
+        lockContinue("Make your choice 😏 (buttons are below)");
+        // Continue isn't needed here; it becomes a "Finish" after you click a destiny button (handled below)
+        continueBtn.classList.remove("ready");
+        return;
+      }
+
+      // normal step options
+      step.options.forEach((o) => {
+        const b = document.createElement("button");
+        b.className = "opt";
+        b.type = "button";
+        b.textContent = o.label;
+
+        b.addEventListener("click", () => {
+          if (picked) return;
+          if (step.kind === "photo" && !photoReady) {
+            lockContinue("Photo missing — add it to continue 📸");
+            return;
+          }
+          picked = true;
+          score += o.score;
+          setProgress();
+
+          if (step.kind === "photo") {
+            if (o.score === 3) reaction.textContent = "Fair. We’ll take 37 more pics then 😈✨";
+            else if (o.score === 2) reaction.textContent = "Whoa. New Skill Unlocked 📸";
+            else reaction.textContent = "LMAO okay okay… new photo shoot scheduled 😂";
+          } else {
+            if (o.score === 3) reaction.textContent = "Bold choice. I respect it 😈";
+            else if (o.score === 2) reaction.textContent = "Okayyy cute. Green flag behavior ✅";
+            else reaction.textContent = "Classy. Mysterious. Intriguing 😌";
+          }
+          unlockContinue();
+        });
+
+        opts.appendChild(b);
+      });
+
+      lockContinue("Pick an option to continue 😏");
+      setProgress();
+    };
+
+    continueBtn.addEventListener("click", () => {
+      if (!continueBtn.classList.contains("ready")) return;
+
+      if (idx < steps.length - 1) {
+        idx++;
+        render();
+      } else {
+        // end (shouldn't really happen because destiny buttons finish)
+      }
+    });
+
+    // Destiny button behavior (same as your original)
+    document.getElementById("yesBtn").addEventListener("click", () => {
+      openModal("It’s a date! 🎉", "I’m officially excited. Text me: “YES 💘” and I’ll confirm the plan.");
+      reaction.textContent = "Correct answer 😌💘";
+      continueBtn.classList.add("ready");
+    });
+
+    document.getElementById("shyBtn").addEventListener("click", () => {
+      openModal("Aww stop 😌", "That counts as yes. I’m accepting on your behalf (legally: joking).");
+      reaction.textContent = "Shy yes = yes. I don’t make the rules 😌";
+      continueBtn.classList.add("ready");
+    });
+
+    // No button dodge (kept same behavior)
+    const noBtn = document.getElementById("noBtn");
+    const actions = document.querySelector(".actions");
+    let dodges = 0;
+
+    const dodge = () => {
+      dodges++;
+      const maxX = actions.clientWidth - noBtn.clientWidth;
+      const maxY = 8;
+      const x = Math.max(0, Math.min(maxX, Math.random() * maxX));
+      const y = (Math.random() * maxY) - (maxY/2);
+
+      noBtn.style.position = "absolute";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+
+      if (dodges >= 5) {
+        noBtn.textContent = "Okay fine… Yes 😅";
+      }
+    };
+
+    noBtn.addEventListener("mouseenter", dodge);
+    noBtn.addEventListener("click", () => {
+      if (dodges >= 5) {
+        openModal("Correct choice 😏", "I knew you had taste. Text me your availability and I’ll plan the cutest date.");
+        reaction.textContent = "We love a redemption arc 😌";
+        continueBtn.classList.add("ready");
+      } else {
+        dodge();
+      }
+    });
+
+    document.getElementById("closeBtn").addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => { if(e.target === modal) closeModal(); });
+
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      const details =
+        `Valentine’s Date 💘\n` +
+        `When: ${document.getElementById("whenTxt").textContent}\n` +
+        `Where: ${document.getElementById("whereTxt").textContent}\n` +
+        `Plan: ${document.getElementById("planTxt").textContent}\n` +
+        `Dress: ${document.getElementById("dressTxt").textContent}\n`;
+      try{
+        await navigator.clipboard.writeText(details);
+        toast.classList.add("show");
+        setTimeout(()=>toast.classList.remove("show"), 1200);
+      }catch{
+        alert("Copy didn’t work here—just screenshot it like a true romantic 😄");
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
